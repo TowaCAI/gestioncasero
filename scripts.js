@@ -341,13 +341,19 @@ function calcularPrecio() {
     const margenDeseado = parseFloat(document.getElementById('margenDeseado').value) || 0;
 
     const costoTotal = costoIngredientes + costoManoObra + gastosGenerales;
-    const precioVenta = costoTotal / (1 - margenDeseado / 100);
-
-    document.getElementById('resultadoPrecio').innerHTML = `
-        <strong>Precio de venta recomendado: $${precioVenta.toFixed(2)}</strong><br>
+    let precioVenta = 0;
+    let mensaje = '';
+    if (margenDeseado >= 100) {
+        mensaje = '<span style="color:red">El margen deseado debe ser menor al 100%</span>';
+    } else if (margenDeseado < 0) {
+        mensaje = '<span style="color:red">El margen deseado no puede ser negativo</span>';
+    } else {
+        precioVenta = costoTotal / (1 - margenDeseado / 100);
+        mensaje = `<strong>Precio de venta recomendado: $${precioVenta.toFixed(2)}</strong><br>
         Costo total: $${costoTotal.toFixed(2)}<br>
-        Ganancia: $${(precioVenta - costoTotal).toFixed(2)}
-    `;
+        Ganancia: $${(precioVenta - costoTotal).toFixed(2)}`;
+    }
+    document.getElementById('resultadoPrecio').innerHTML = mensaje;
     document.getElementById('resultadoPrecio').style.display = 'block';
 }
 
